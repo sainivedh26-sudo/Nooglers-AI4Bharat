@@ -6,3 +6,6 @@
 <br>
 
 ## Made with ❤️ by Team Nooglers
+<br>
+
+<img width="1034" height="583" alt="image" src="https://github.com/user-attachments/assets/50b759d4-d37d-44e3-8f44-d090d7530643" />
