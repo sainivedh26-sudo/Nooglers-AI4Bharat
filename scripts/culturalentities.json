@@ -1,0 +1,138 @@
+{
+  "_metadata": {
+    "version": "1.0.0",
+    "description": "Seed cultural entity mappings for Maatram AI. Keyed as 'SourceEntityName::TargetRegion'.",
+    "last_updated": "2026-03-05",
+    "schema": "source_entity::target_region -> { target_name, wikipedia_context }"
+  },
+  "mappings": {
+    "Vishu::Tamil Nadu": {
+      "target_name": "Puthandu",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Puthandu, also known as Tamil New Year, is the first day of the year on the Tamil calendar and is celebrated as a festival by Tamils worldwide. It falls on the first day of the Tamil month Chithirai, usually on 14 April of the Gregorian calendar.",
+      "source_name": "Vishu",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Vishu::Karnataka": {
+      "target_name": "Ugadi",
+      "target_region": "Karnataka",
+      "wikipedia_context": "Ugadi is the New Year's Day for the people of Karnataka, Andhra Pradesh, and Telangana states of India. It is celebrated on the first day of Chaitra, the first month in the Hindu lunar calendar.",
+      "source_name": "Vishu",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Vishu::Maharashtra": {
+      "target_name": "Gudi Padwa",
+      "target_region": "Maharashtra",
+      "wikipedia_context": "Gudi Padwa is a spring-time festival that marks the traditional new year for Marathi and Konkani Hindus. It is celebrated on the first day of the Chaitra month to mark the beginning of the new year.",
+      "source_name": "Vishu",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Vishu::West Bengal": {
+      "target_name": "Poila Boishakh",
+      "target_region": "West Bengal",
+      "wikipedia_context": "Poila Boishakh is the first day of the Bengali calendar and is celebrated as the Bengali New Year. The festival is observed on 14 or 15 April every year in West Bengal and Bangladesh.",
+      "source_name": "Vishu",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Sadhya::Tamil Nadu": {
+      "target_name": "Virundhu Sappadu",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Virundhu Sappadu refers to a traditional Tamil feast served on a banana leaf, typically during festivals and celebrations. It is a multi-course meal that is central to Tamil cultural hospitality.",
+      "source_name": "Sadhya",
+      "source_region": "Kerala",
+      "entity_type": "Food"
+    },
+    "Sadhya::Karnataka": {
+      "target_name": "Oota",
+      "target_region": "Karnataka",
+      "wikipedia_context": "Oota is the traditional festive meal of Karnataka served on a banana leaf, consisting of multiple dishes including rice, sambar, rasam, payasam, and various vegetable preparations, served during festivals and weddings.",
+      "source_name": "Sadhya",
+      "source_region": "Kerala",
+      "entity_type": "Food"
+    },
+    "Onam::Tamil Nadu": {
+      "target_name": "Pongal",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Pongal is a multi-day Hindu harvest festival of South India, particularly celebrated by Tamils. It is observed at the beginning of the month of Thai in the Tamil calendar, usually on 14 January.",
+      "source_name": "Onam",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Onam::Karnataka": {
+      "target_name": "Makara Sankranti",
+      "target_region": "Karnataka",
+      "wikipedia_context": "Makara Sankranti, also known as Sankranti or Suggi in Karnataka, is a harvest festival celebrated across India. It marks the transition of the Sun into Makara (Capricorn) and is one of the most auspicious days in the Hindu calendar.",
+      "source_name": "Onam",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Kasavu Saree::Tamil Nadu": {
+      "target_name": "Kanjivaram Pattu",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Kanjivaram silk sarees, also known as Kanchipuram sarees, are a type of silk saree made in Kanchipuram, Tamil Nadu, India. They are known for their wide, contrasting borders and are considered one of the finest silk sarees in India.",
+      "source_name": "Kasavu Saree",
+      "source_region": "Kerala",
+      "entity_type": "Clothing"
+    },
+    "Kasavu Saree::West Bengal": {
+      "target_name": "Tant Saree",
+      "target_region": "West Bengal",
+      "wikipedia_context": "Tant sarees are traditional handloom sarees of West Bengal, known for their lightweight feel and intricate woven borders. They are a significant part of Bengali cultural identity and are worn during festivals like Durga Puja.",
+      "source_name": "Kasavu Saree",
+      "source_region": "Kerala",
+      "entity_type": "Clothing"
+    },
+    "Thrissur Pooram::Tamil Nadu": {
+      "target_name": "Chidambaram Nataraja Temple Festival",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "The Chidambaram Nataraja Temple hosts the Arudra Darisanam festival, a grand celebration with elaborate processions, traditional music, and cultural performances, similar in grandeur to the Thrissur Pooram.",
+      "source_name": "Thrissur Pooram",
+      "source_region": "Kerala",
+      "entity_type": "Festival"
+    },
+    "Puthandu::Kerala": {
+      "target_name": "Vishu",
+      "target_region": "Kerala",
+      "wikipedia_context": "Vishu is a festival celebrated in the Indian state of Kerala, usually on April 14 of every year of the Gregorian Calendar. Vishu marks the astronomical new year of Keralites and is celebrated with Vishukkani, firecrackers, new clothes, and gifts.",
+      "source_name": "Puthandu",
+      "source_region": "Tamil Nadu",
+      "entity_type": "Festival"
+    },
+    "Biryani::Tamil Nadu": {
+      "target_name": "Dindigul Biryani",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Dindigul biryani is a style of biryani that originated in the city of Dindigul in Tamil Nadu. It is known for using cube-shaped pieces of meat, seeraga samba rice, and a tangier, spicier flavour profile compared to other regional biryanis.",
+      "source_name": "Biryani",
+      "source_region": "Hyderabad",
+      "entity_type": "Food"
+    },
+    "Durga Puja::Tamil Nadu": {
+      "target_name": "Navarathri Golu",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Navarathri Golu, also called Kolu, is the practice of displaying dolls and figurines during the nine nights of Navaratri in Tamil Nadu. It is a major cultural and religious tradition where families set up elaborate stepped platforms with figurines depicting deities and scenes.",
+      "source_name": "Durga Puja",
+      "source_region": "West Bengal",
+      "entity_type": "Festival"
+    },
+    "Lohri::Tamil Nadu": {
+      "target_name": "Thai Pongal",
+      "target_region": "Tamil Nadu",
+      "wikipedia_context": "Thai Pongal is the most important day of Pongal, a harvest festival. It falls on the first day of the Tamil month Thai and is celebrated with the boiling of the first rice of the season and offering it to the Sun God.",
+      "source_name": "Lohri",
+      "source_region": "Punjab",
+      "entity_type": "Festival"
+    },
+    "Pongal::West Bengal": {
+      "source_name": "Pongal",
+      "source_region": "Tamil Nadu",
+      "entity_type": "Festival",
+      "target_name": "Chhath in Naihati",
+      "target_region": "West Bengal",
+      "wikipedia_context": "No Wikipedia context found for 'Chhath in Naihati'."
+    }
+  }
+}
