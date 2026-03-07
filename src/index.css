@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 37 33% 98%;
+    --foreground: 0 0% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 18%;
+
+    --primary: 0 100% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 37 25% 90%;
+    --secondary-foreground: 0 0% 18%;
+
+    --muted: 37 18% 90%;
+    --muted-foreground: 0 0% 18%;
+
+    --accent: 213 52% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 213 52% 40%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 37 33% 96%;
+    --sidebar-foreground: 0 0% 18%;
+    --sidebar-primary: 0 100% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 37 18% 90%;
+    --sidebar-accent-foreground: 0 0% 18%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 213 52% 40%;
+
+    --paper: 37 33% 98%;
+    --pencil: 0 0% 18%;
+    --postit: 56 100% 88%;
+    --marker-red: 0 100% 65%;
+    --pen-blue: 213 52% 40%;
+
+    --shadow-hard: 4px 4px 0px 0px hsl(0 0% 18%);
+    --shadow-hard-lg: 8px 8px 0px 0px hsl(0 0% 18%);
+    --shadow-hard-sm: 2px 2px 0px 0px hsl(0 0% 18%);
+    --shadow-subtle: 3px 3px 0px 0px rgba(45, 45, 45, 0.1);
+
+    --font-heading: 'Kalam', cursive;
+    --font-body: 'Patrick Hand', cursive;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    background-image: radial-gradient(hsl(var(--muted)) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer utilities {
+  .wobbly {
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+  .wobbly-md {
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  }
+  .wobbly-sm {
+    border-radius: 225px 15px 255px 15px / 15px 255px 15px 225px;
+  }
+  .shadow-hard {
+    box-shadow: var(--shadow-hard);
+  }
+  .shadow-hard-lg {
+    box-shadow: var(--shadow-hard-lg);
+  }
+  .shadow-hard-sm {
+    box-shadow: var(--shadow-hard-sm);
+  }
+  .shadow-subtle {
+    box-shadow: var(--shadow-subtle);
+  }
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+}
