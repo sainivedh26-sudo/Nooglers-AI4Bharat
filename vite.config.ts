@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts: ["web.test","nooglers.maatram.dev.test"],
     hmr: {
       overlay: false,
     },

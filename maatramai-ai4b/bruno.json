@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "maatramai-ai4b",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
