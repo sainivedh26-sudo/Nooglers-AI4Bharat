@@ -40,7 +40,7 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
 
         // Original video state
         const [isOriginalPlaying, setIsOriginalPlaying] = useState(false);
-        const [isOriginalMuted, setIsOriginalMuted] = useState(true);
+        const [isOriginalMuted, setIsOriginalMuted] = useState(false);
         const [originalProgress, setOriginalProgress] = useState(0);
         const [originalError, setOriginalError] = useState(false);
         const originalVideoRef = useRef<HTMLVideoElement>(null);
@@ -58,28 +58,45 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
         // ── Width helper ─────────────────────────────────────────────────────────
         const getWidth = useCallback(() => containerRef.current?.offsetWidth || 600, []);
 
+        // ── SYNC LOGIC ──────────────────────────────────────────────────────────
+        const syncTime = useCallback((from: React.RefObject<HTMLVideoElement>, to: React.RefObject<HTMLVideoElement>) => {
+            if (from.current && to.current) {
+                to.current.currentTime = from.current.currentTime;
+                // Force play on the target video immediately
+                to.current.play().catch(() => { });
+            }
+        }, []);
+
         // ── Slide helpers ────────────────────────────────────────────────────────
         const slideToTranslated = useCallback(() => {
-            if (!processingDone) return; // guard
+            if (!processingDone) return;
             const w = getWidth();
             animate(x, -w, { type: "spring", stiffness: 300, damping: 30 });
             setActivePanel("translated");
-            // Pause original when switching
+
+            // Sync time and force play
+            syncTime(originalVideoRef, translatedVideoRef);
+            setIsTranslatedPlaying(true);
+
             if (originalVideoRef.current) {
                 originalVideoRef.current.pause();
                 setIsOriginalPlaying(false);
             }
-        }, [getWidth, x, processingDone]);
+        }, [getWidth, x, processingDone, syncTime]);
 
         const slideToOriginal = useCallback(() => {
             animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
             setActivePanel("original");
-            // Pause translated when switching
+
+            // Sync time and force play
+            syncTime(translatedVideoRef, originalVideoRef);
+            setIsOriginalPlaying(true);
+
             if (translatedVideoRef.current) {
                 translatedVideoRef.current.pause();
                 setIsTranslatedPlaying(false);
             }
-        }, [x]);
+        }, [x, syncTime]);
 
         // ── Imperative handle ────────────────────────────────────────────────────
         useImperativeHandle(ref, () => ({
@@ -88,7 +105,6 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                 slideToTranslated();
                 setTimeout(() => {
                     if (translatedVideoRef.current && !translatedError) {
-                        translatedVideoRef.current.currentTime = 0;
                         translatedVideoRef.current.play().catch(() => { });
                         setIsTranslatedPlaying(true);
                     }
@@ -178,7 +194,7 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
             setIsTranslatedPlaying(false);
             setOriginalProgress(0);
             setTranslatedProgress(0);
-            setIsOriginalMuted(true);
+            setIsOriginalMuted(false);
             setIsTranslatedMuted(false);
             x.set(0);
         }, [originalUrl, translatedUrl, x]);
@@ -186,16 +202,8 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
         // ── Auto-play translated when processingDone flips to true ───────────────
         useEffect(() => {
             if (processingDone && activePanel === "original") {
-                // Slight delay for the user to see the "done" state before we slide over
                 const t = setTimeout(() => {
                     slideToTranslated();
-                    setTimeout(() => {
-                        if (translatedVideoRef.current && !translatedError) {
-                            translatedVideoRef.current.currentTime = 0;
-                            translatedVideoRef.current.play().catch(() => { });
-                            setIsTranslatedPlaying(true);
-                        }
-                    }, 500);
                 }, 600);
                 return () => clearTimeout(t);
             }
@@ -208,7 +216,6 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
             isMuted: boolean,
             toggleMute: () => void,
             progress: number,
-            label: string,
             pointerEvents: boolean
         ) => (
             <div
@@ -232,7 +239,7 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                             <Play className="w-4 h-4 ml-0.5" strokeWidth={3} />
                         )}
                     </button>
-                    <span className="font-body text-xs text-white/80 flex-1 text-center">{label}</span>
+                    <div className="flex-1" />
                     <button
                         onClick={(e) => { e.stopPropagation(); toggleMute(); }}
                         className="w-8 h-8 flex items-center justify-center text-white hover:scale-110 transition-transform"
@@ -253,33 +260,36 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                 <div className="flex border-b-2 border-pencil bg-background">
                     <button
                         onClick={slideToOriginal}
-                        className={`flex-1 py-2 px-3 font-heading text-sm font-bold transition-all duration-150 flex items-center justify-center gap-1.5 ${activePanel === "original"
-                                ? "bg-pen-blue text-primary-foreground"
-                                : "text-foreground/60 hover:bg-postit/50"
+                        className={`flex-1 py-2 px-3 font-heading text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1.5 uppercase tracking-wider ${activePanel === "original"
+                            ? "bg-pen-blue text-primary-foreground"
+                            : "text-foreground/60 hover:bg-postit/50 shadow-subtle"
                             }`}
                     >
-                        <ChevronLeft className="w-3.5 h-3.5" />
-                        Original ({originalLang})
+                        {activePanel === "original" ? "Showing Source" : "Swipe for Source"}
                     </button>
 
                     <div className="w-[3px] bg-pencil relative flex items-center justify-center shrink-0">
-                        <div className="absolute w-6 h-6 bg-pencil rounded-full flex items-center justify-center z-10 shadow-hard-sm">
+                        <div className="absolute w-6 h-6 bg-pencil rounded-full flex items-center justify-center z-20 shadow-hard-sm">
                             <GripVertical className="w-3 h-3 text-card" strokeWidth={3} />
                         </div>
                     </div>
 
                     <button
                         onClick={() => { if (processingDone) slideToTranslated(); }}
-                        className={`flex-1 py-2 px-3 font-heading text-sm font-bold transition-all duration-150 flex items-center justify-center gap-1.5 ${!processingDone
-                                ? "text-foreground/30 cursor-not-allowed"
-                                : activePanel === "translated"
-                                    ? "bg-marker-red text-primary-foreground"
-                                    : "text-foreground/60 hover:bg-postit/50"
+                        className={`flex-1 py-2 px-3 font-heading text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1.5 uppercase tracking-wider ${!processingDone
+                            ? "text-foreground/30 cursor-not-allowed"
+                            : activePanel === "translated"
+                                ? "bg-marker-red text-primary-foreground"
+                                : "text-foreground/60 hover:bg-postit/50 shadow-subtle"
                             }`}
                     >
-                        {!processingDone && <Lock className="w-3 h-3" />}
-                        Translated ({targetLang})
-                        {processingDone && <ChevronRight className="w-3.5 h-3.5" />}
+                        {!processingDone ? (
+                            <><Lock className="w-3 h-3" /> Locked</>
+                        ) : activePanel === "translated" ? (
+                            "Showing Result"
+                        ) : (
+                            "Swipe for Result"
+                        )}
                     </button>
                 </div>
 
@@ -335,12 +345,11 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                                         isOriginalPlaying, toggleOriginalPlay,
                                         isOriginalMuted, toggleOriginalMute,
                                         originalProgress,
-                                        `🎬 Original · ${originalLang}`,
                                         activePanel === "original"
                                     )}
                                     {/* Badge */}
-                                    <div className="absolute top-3 left-3 px-2 py-1 bg-pen-blue text-white font-body text-[10px] font-bold wobbly-sm shadow-hard-sm">
-                                        ORIGINAL
+                                    <div className="absolute top-3 left-3 px-2 py-1 bg-pen-blue text-white font-body text-[10px] font-bold wobbly-sm shadow-hard-sm uppercase tracking-widest">
+                                        Source ({originalLang})
                                     </div>
                                 </>
                             )}
@@ -350,15 +359,15 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                         <div className="shrink-0 h-full bg-black relative" style={{ width: "100%", minWidth: "100%" }}>
                             {/* Lock overlay when processing hasn't run */}
                             {!processingDone && (
-                                <div className="absolute inset-0 z-30 bg-pencil/60 flex flex-col items-center justify-center backdrop-blur-sm">
-                                    <div className="w-16 h-16 rounded-full bg-card/90 border-[3px] border-pencil flex items-center justify-center shadow-hard mb-3">
+                                <div className="absolute inset-0 z-30 bg-pencil/80 flex flex-col items-center justify-center backdrop-blur-sm p-8">
+                                    <div className="w-16 h-16 rounded-full bg-card/90 border-[3px] border-pencil flex items-center justify-center shadow-hard mb-4">
                                         <Lock className="w-7 h-7 text-pencil" strokeWidth={2.5} />
                                     </div>
-                                    <p className="font-heading text-base font-bold text-white text-center px-4">
-                                        Process Video First
-                                    </p>
-                                    <p className="font-body text-xs text-white/70 text-center mt-1 px-8">
-                                        Run the pipeline on the right to unlock the culturally translated version
+                                    <h3 className="font-heading text-xl font-bold text-white uppercase tracking-tight mb-2">
+                                        Processing Required
+                                    </h3>
+                                    <p className="font-body text-xs text-white/70 text-center max-w-[280px]">
+                                        The cultural adaptation pipeline is currently idle. Initialize process to unlock this version.
                                     </p>
                                 </div>
                             )}
@@ -366,8 +375,7 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                             {translatedError ? (
                                 <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 p-4">
                                     <AlertCircle className="w-10 h-10 text-muted-foreground/50 mb-2" strokeWidth={2} />
-                                    <p className="font-body text-sm text-muted-foreground text-center">Translated video unavailable</p>
-                                    <p className="font-body text-xs text-muted-foreground/60 mt-1">{originalLang} → {targetLang}</p>
+                                    <p className="font-body text-sm text-muted-foreground text-center">Translation Stream Offline</p>
                                     <img src={FALLBACK_POSTER} alt="" className="absolute inset-0 w-full h-full object-contain opacity-10" />
                                 </div>
                             ) : (
@@ -401,13 +409,12 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
                                             isTranslatedPlaying, toggleTranslatedPlay,
                                             isTranslatedMuted, toggleTranslatedMute,
                                             translatedProgress,
-                                            `🌐 ${originalLang} → ${targetLang}`,
                                             activePanel === "translated"
                                         )}
                                     {/* Badge */}
                                     {processingDone && (
-                                        <div className="absolute top-3 left-3 px-2 py-1 bg-marker-red text-white font-body text-[10px] font-bold wobbly-sm shadow-hard-sm z-20">
-                                            ✦ CULTURALLY TRANSLATED
+                                        <div className="absolute top-3 left-3 px-2 py-1 bg-marker-red text-white font-body text-[10px] font-bold wobbly-sm shadow-hard-sm z-20 uppercase tracking-widest">
+                                            Result ({targetLang})
                                         </div>
                                     )}
                                 </>
@@ -417,40 +424,18 @@ const SwipeableVideoPlayer = forwardRef<SwipeableVideoPlayerHandle, SwipeableVid
 
                     {/* ── Swipe hints ── */}
                     <AnimatePresence>
-                        {activePanel === "original" && processingDone && (
+                        {processingDone && (
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute bottom-14 right-3 flex items-center gap-1 bg-card/90 border-2 border-pencil px-2 py-1 wobbly-sm shadow-hard-sm pointer-events-none z-20"
+                                className={`absolute top-1/2 -translate-y-1/2 flex items-center gap-2 bg-foreground text-background px-4 py-2 font-heading text-[10px] font-black uppercase tracking-widest shadow-hard-sm pointer-events-none z-30 transition-all ${activePanel === "original" ? "right-6" : "left-6"}`}
                             >
-                                <span className="font-body text-[10px] text-foreground/70 whitespace-nowrap">
-                                    ← Swipe for translated
-                                </span>
-                                <motion.div
-                                    animate={{ x: [0, -4, 0] }}
-                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                                >
-                                    <ChevronLeft className="w-3.5 h-3.5 text-marker-red" strokeWidth={3} />
-                                </motion.div>
-                            </motion.div>
-                        )}
-                        {activePanel === "translated" && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="absolute bottom-14 left-3 flex items-center gap-1 bg-card/90 border-2 border-pencil px-2 py-1 wobbly-sm shadow-hard-sm pointer-events-none z-20"
-                            >
-                                <motion.div
-                                    animate={{ x: [0, 4, 0] }}
-                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                                >
-                                    <ChevronRight className="w-3.5 h-3.5 text-pen-blue" strokeWidth={3} />
-                                </motion.div>
-                                <span className="font-body text-[10px] text-foreground/70 whitespace-nowrap">
-                                    Swipe for original →
-                                </span>
+                                {activePanel === "original" ? (
+                                    <>Swipe for result <ChevronRight className="w-3 h-3 animate-bounce-x" /></>
+                                ) : (
+                                    <><ChevronLeft className="w-3 h-3 animate-bounce-x" /> Swipe for source</>
+                                )}
                             </motion.div>
                         )}
                     </AnimatePresence>
