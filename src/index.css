@@ -73,7 +73,12 @@
     background-size: 24px 24px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
   }
 }
@@ -82,28 +87,74 @@
   .wobbly {
     border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   }
+
   .wobbly-md {
     border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
   }
+
   .wobbly-sm {
     border-radius: 225px 15px 255px 15px / 15px 255px 15px 225px;
   }
+
   .shadow-hard {
     box-shadow: var(--shadow-hard);
   }
+
   .shadow-hard-lg {
     box-shadow: var(--shadow-hard-lg);
   }
+
   .shadow-hard-sm {
     box-shadow: var(--shadow-hard-sm);
   }
+
   .shadow-subtle {
     box-shadow: var(--shadow-subtle);
   }
+
   .font-heading {
     font-family: var(--font-heading);
   }
+
   .font-body {
     font-family: var(--font-body);
+  }
+
+  /* Scrollbar styling for transcript panels */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--pencil) / 0.2) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--pencil) / 0.2);
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--pencil) / 0.4);
+  }
+
+  @keyframes progress-scan {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: 40px 0;
+    }
+  }
+
+  .animate-progress-scan {
+    animation: progress-scan 1s linear infinite;
   }
 }

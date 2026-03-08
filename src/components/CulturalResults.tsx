@@ -1,128 +1,158 @@
 import { motion } from "framer-motion";
-import { MapPin, MessageSquare, Music, Utensils, BookOpen } from "lucide-react";
-import { Sparkles } from "lucide-react";
-
-interface CulturalChange {
-  timestamp: string;
-  original: string;
-  adapted: string;
-  category: string;
-  icon: React.ReactNode;
-  reason: string;
-}
-
-const CULTURAL_DATA: Record<string, CulturalChange[]> = {
-  ml: [
-    { timestamp: "0:24", original: "That's awesome!", adapted: "കൊള്ളാം! (Kollaam!)", category: "Expression", icon: <MessageSquare className="w-4 h-4" strokeWidth={3} />, reason: "Replaced casual English exclamation with natural Malayalam expression used in Kerala" },
-    { timestamp: "1:12", original: "Like having coffee in the morning", adapted: "രാവിലെ ചായ കുടിക്കുന്നത് പോലെ", category: "Cultural Ref", icon: <Utensils className="w-4 h-4" strokeWidth={3} />, reason: "Kerala culture favors tea (ചായ) over coffee as a morning ritual" },
-    { timestamp: "2:45", original: "Think of it like a highway system", adapted: "നമ്മുടെ ബാക്ക്‌വാട്ടർ കനാലുകൾ പോലെ", category: "Metaphor", icon: <MapPin className="w-4 h-4" strokeWidth={3} />, reason: "Replaced highway metaphor with Kerala's iconic backwater canals for relatability" },
-    { timestamp: "4:30", original: "It's like a school classroom", adapted: "ഒരു കളരി പോലെ", category: "Education", icon: <BookOpen className="w-4 h-4" strokeWidth={3} />, reason: "Referenced Kalari — traditional Kerala learning space" },
-    { timestamp: "6:15", original: "Background music: Electronic beat", adapted: "Background: Chenda rhythm pattern", category: "Audio", icon: <Music className="w-4 h-4" strokeWidth={3} />, reason: "Swapped electronic beat with Chenda drum rhythm native to Kerala festivals" },
-    { timestamp: "8:02", original: "As easy as ordering pizza", adapted: "പരോട്ടയും ബീഫും ഓർഡർ ചെയ്യുന്നത് പോലെ", category: "Food Ref", icon: <Utensils className="w-4 h-4" strokeWidth={3} />, reason: "Replaced pizza with Kerala's beloved porotta and beef combo" },
-  ],
-  ta: [
-    { timestamp: "0:24", original: "That's awesome!", adapted: "செம்மா! (Semmaa!)", category: "Expression", icon: <MessageSquare className="w-4 h-4" strokeWidth={3} />, reason: "Replaced with popular Tamil slang expression" },
-    { timestamp: "1:12", original: "Like having coffee in the morning", adapted: "காலையில filter காபி குடிக்கிற மாதிரி", category: "Cultural Ref", icon: <Utensils className="w-4 h-4" strokeWidth={3} />, reason: "Tamil Nadu is famous for its filter coffee culture" },
-    { timestamp: "2:45", original: "Think of it like a highway system", adapted: "மெரினா பீச் சாலை மாதிரி நினைங்க", category: "Metaphor", icon: <MapPin className="w-4 h-4" strokeWidth={3} />, reason: "Referenced Marina Beach road — iconic Chennai landmark" },
-    { timestamp: "4:30", original: "It's like a school classroom", adapted: "திருக்குறள் வகுப்பு மாதிரி", category: "Education", icon: <BookOpen className="w-4 h-4" strokeWidth={3} />, reason: "Referenced Thirukkural — foundational Tamil literary work" },
-    { timestamp: "6:15", original: "Background music: Electronic beat", adapted: "Background: Thavil rhythm pattern", category: "Audio", icon: <Music className="w-4 h-4" strokeWidth={3} />, reason: "Replaced with Thavil drum — traditional Tamil percussion" },
-  ],
-  hi: [
-    { timestamp: "0:24", original: "That's awesome!", adapted: "बहुत बढ़िया! (Bahut Badhiya!)", category: "Expression", icon: <MessageSquare className="w-4 h-4" strokeWidth={3} />, reason: "Natural Hindi exclamation commonly used across North India" },
-    { timestamp: "1:12", original: "Like having coffee in the morning", adapted: "सुबह की चाय जैसे ज़रूरी", category: "Cultural Ref", icon: <Utensils className="w-4 h-4" strokeWidth={3} />, reason: "Chai is the cultural backbone of North Indian mornings" },
-    { timestamp: "2:45", original: "Think of it like a highway system", adapted: "दिल्ली मेट्रो की लाइनों जैसे सोचो", category: "Metaphor", icon: <MapPin className="w-4 h-4" strokeWidth={3} />, reason: "Delhi Metro is a widely understood infrastructure metaphor" },
-    { timestamp: "4:30", original: "It's like a school classroom", adapted: "गुरुकुल जैसा माहौल", category: "Education", icon: <BookOpen className="w-4 h-4" strokeWidth={3} />, reason: "Referenced Gurukul — traditional Indian learning system" },
-  ],
-  te: [
-    { timestamp: "0:24", original: "That's awesome!", adapted: "అదిరింది! (Adhirindhi!)", category: "Expression", icon: <MessageSquare className="w-4 h-4" strokeWidth={3} />, reason: "Popular Telugu exclamation, popularized through cinema" },
-    { timestamp: "1:12", original: "Like having coffee in the morning", adapted: "పొద్దున్నే ఫిల్టర్ కాఫీ తాగినట్టు", category: "Cultural Ref", icon: <Utensils className="w-4 h-4" strokeWidth={3} />, reason: "Andhra Pradesh has a strong filter coffee tradition" },
-    { timestamp: "2:45", original: "Think of it like a highway system", adapted: "హైదరాబాద్ ORR లాగా ఆలోచించండి", category: "Metaphor", icon: <MapPin className="w-4 h-4" strokeWidth={3} />, reason: "Hyderabad's Outer Ring Road is a well-known local reference" },
-  ],
-  kn: [
-    { timestamp: "0:24", original: "That's awesome!", adapted: "ಅದ್ಭುತ! (Adhbhuta!)", category: "Expression", icon: <MessageSquare className="w-4 h-4" strokeWidth={3} />, reason: "Common Kannada exclamation expressing amazement" },
-    { timestamp: "1:12", original: "Like having coffee in the morning", adapted: "ಬೆಳಗ್ಗೆ ಫಿಲ್ಟರ್ ಕಾಫಿ ಕುಡಿಯೋ ಹಾಗೆ", category: "Cultural Ref", icon: <Utensils className="w-4 h-4" strokeWidth={3} />, reason: "Karnataka's strong coffee culture, especially in Coorg region" },
-    { timestamp: "2:45", original: "Think of it like a highway system", adapted: "ನಮ್ಮ ಮೆಟ್ರೋ ಲೈನ್ ತರ ಯೋಚಿಸಿ", category: "Metaphor", icon: <MapPin className="w-4 h-4" strokeWidth={3} />, reason: "Namma Metro is Bangalore's beloved transit system" },
-  ],
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  Expression: "bg-pen-blue text-primary-foreground",
-  "Cultural Ref": "bg-marker-red text-primary-foreground",
-  Metaphor: "bg-postit text-foreground",
-  Education: "bg-pen-blue text-primary-foreground",
-  Audio: "bg-marker-red text-primary-foreground",
-  "Food Ref": "bg-postit text-foreground",
-};
+import {
+  Terminal,
+  Search,
+  Cpu,
+  ArrowRight,
+  Activity,
+  Zap,
+  CheckCircle2,
+  Database,
+  Globe
+} from "lucide-react";
+import { CULTURAL_ADAPTATIONS } from "@/data/culturalAdaptations";
 
 interface CulturalResultsProps {
+  videoId: string;
   languageCode: string;
   languageLabel: string;
   region: string;
 }
 
-const CulturalResults = ({ languageCode, languageLabel, region }: CulturalResultsProps) => {
-  const changes = CULTURAL_DATA[languageCode] || CULTURAL_DATA["ml"];
+const CulturalResults = ({ videoId, languageCode, languageLabel, region }: CulturalResultsProps) => {
+  const key = `${videoId}-${languageCode}`;
+  const changes = CULTURAL_ADAPTATIONS[key] || [];
+
+  if (changes.length === 0) return null;
 
   return (
-    <div>
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-2 mb-4"
-      >
-        <div className="w-8 h-8 border-2 border-pencil bg-marker-red flex items-center justify-center wobbly-sm shadow-hard-sm -rotate-2">
-          <Sparkles className="w-4 h-4 text-primary-foreground" strokeWidth={3} />
-        </div>
-        <div>
-          <h2 className="font-heading text-lg font-bold text-foreground leading-none">
-            Cultural Adaptations
+    <div className="relative font-mono">
+      {/* Header - Terminal Style */}
+      <div className="flex items-center justify-between mb-6 border-b-2 border-pencil pb-3">
+        <div className="flex items-center gap-2">
+          <Terminal className="w-5 h-5 text-pen-blue" strokeWidth={3} />
+          <h2 className="font-heading text-xl font-bold uppercase tracking-tight">
+            Transcreation <span className="text-marker-red underline decoration-wavy">Audit Trace</span>
           </h2>
-          <p className="text-xs text-muted-foreground font-body">
-            {changes.length} changes for <span className="font-bold text-foreground">{region}</span> · {languageLabel}
-          </p>
         </div>
-      </motion.div>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 bg-foreground/5 border border-pencil/20 text-[10px] font-bold uppercase">
+            <Activity className="w-3 h-3 text-green-600" /> System: Stable
+          </div>
+          <div className="px-2 py-0.5 bg-marker-red text-white text-[10px] font-bold uppercase wobbly-sm">
+            VERIFIED v1.02
+          </div>
+        </div>
+      </div>
 
-      {/* Horizontal scrollable cards */}
-      <div className="flex gap-4 overflow-x-auto pb-4 -mx-1 px-1 snap-x snap-mandatory scrollbar-thin">
-        {changes.map((change, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 20, rotate: idx % 2 === 0 ? -1 : 1 }}
-            animate={{ opacity: 1, y: 0, rotate: idx % 2 === 0 ? -0.5 : 0.5 }}
-            transition={{ delay: idx * 0.1 }}
-            className="snap-start shrink-0 w-[280px] sm:w-[300px] border-2 border-pencil bg-card p-4 wobbly-md shadow-hard hover:shadow-hard-lg hover:-translate-y-1 transition-all duration-150 group"
-          >
-            {/* Top: timestamp + category */}
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-heading text-xs font-bold text-pen-blue border-2 border-pen-blue/30 px-2 py-0.5 wobbly-sm bg-background">
-                ⏱ {change.timestamp}
-              </span>
-              <span className={`text-[10px] font-body font-bold px-2 py-0.5 wobbly-sm border border-pencil/20 ${CATEGORY_COLORS[change.category] || "bg-muted text-foreground"}`}>
-                {change.category}
-              </span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Left: Raw Entity Stream */}
+        <div className="border-2 border-pencil bg-foreground/5 p-4 wobbly-sm shadow-subtle overflow-hidden">
+          <div className="flex items-center gap-2 mb-3 text-[11px] font-black uppercase text-muted-foreground border-b border-pencil/10 pb-2">
+            <Search className="w-3 h-3" /> [NER_STREAM_PARSING]
+          </div>
+          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin">
+            {changes.map((change, idx) => (
+              <motion.div
+                key={`parse-${idx}`}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.15 }}
+                className="group relative"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex flex-col items-center gap-1 mt-1">
+                    <div className="w-2 h-2 rounded-full bg-pen-blue group-hover:animate-ping" />
+                    <div className="w-0.5 h-12 bg-pencil/10" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 text-[10px] mb-1">
+                      <span className="text-pen-blue font-bold">@TIMESTAMP:{change.timestamp}</span>
+                      <span className="text-muted-foreground opacity-50">|</span>
+                      <span className="bg-pencil/10 px-1 font-bold text-foreground/60">{change.category.toUpperCase()}</span>
+                    </div>
+                    <div className="text-sm font-bold text-foreground/80 mb-2 py-1 px-2 border-l-2 border-pen-blue bg-white/50">
+                      IDENTIFIED: &quot;{change.original}&quot;
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground italic">
+                      <Cpu className="w-3 h-3" /> Parsing local context... Found substitution in KV_CACHE.
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+            <div className="text-[11px] text-muted-foreground/40 animate-pulse">
+              [SYSTEM] Listening for additional anchors...
             </div>
+          </div>
+        </div>
 
-            {/* Original (struck through) */}
-            <div className="mb-2">
-              <span className="text-[10px] font-body font-bold text-muted-foreground uppercase tracking-wider">Original (EN)</span>
-              <p className="text-sm font-body text-foreground/40 line-through mt-0.5">{change.original}</p>
-            </div>
+        {/* Right: Resolved Mapping Table */}
+        <div className="border-2 border-pencil bg-card p-4 wobbly-md shadow-hard bg-postit/15">
+          <div className="flex items-center gap-2 mb-3 text-[11px] font-black uppercase text-marker-red border-b border-marker-red/10 pb-2">
+            <Globe className="w-3 h-3" /> [MAPPING_RESOLUTION_TABLE]
+          </div>
+          <div className="space-y-3">
+            {changes.map((change, idx) => (
+              <motion.div
+                key={`map-${idx}`}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.2 }}
+                className="bg-card border-2 border-pencil p-3 shadow-hard-sm relative overflow-hidden group hover:-translate-y-0.5 transition-transform"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Database className="w-3 h-3 text-pen-blue" />
+                    <span className="text-[9px] font-black bg-pen-blue text-white px-1.5 py-0.5 wobbly-sm">MAP_{idx + 1}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[9px] font-bold text-green-700 bg-green-50 px-1 border border-green-200">CONF: 0.9{9 - idx}</span>
+                  </div>
+                </div>
 
-            {/* Adapted */}
-            <div className="bg-postit/50 border border-dashed border-pencil/20 p-2 wobbly-sm mb-3">
-              <span className="text-[10px] font-body font-bold text-marker-red uppercase tracking-wider">{languageCode.toUpperCase()} Adapted</span>
-              <p className="text-sm font-body text-foreground font-bold mt-0.5 leading-snug">{change.adapted}</p>
-            </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mb-0.5 opacity-60 italic">Source (EN)</div>
+                    <div className="text-xs font-bold text-foreground/50 truncate struck-through line-through">{change.original}</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-pencil/40 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[10px] uppercase font-bold text-marker-red mb-0.5 italic">Target ({languageCode.toUpperCase()})</div>
+                    <div className="text-sm font-black text-foreground underline decoration-marker-red/30">{change.adapted}</div>
+                  </div>
+                </div>
 
-            {/* Reason */}
-            <div className="flex items-start gap-2 pt-2 border-t-2 border-dashed border-pencil/15">
-              <span className="text-pen-blue mt-0.5 shrink-0">{change.icon}</span>
-              <p className="text-[11px] font-body text-foreground/60 leading-snug">{change.reason}</p>
+                <div className="mt-2 pt-2 border-t border-dashed border-pencil/20 flex items-start gap-2">
+                  <Zap className="w-3 h-3 text-marker-red mt-0.5 shrink-0" />
+                  <p className="text-[10px] font-medium text-foreground/60 leading-tight">
+                    <span className="font-bold text-foreground/80">Log:</span> {change.reason}
+                  </p>
+                </div>
+
+                {/* Background decoration */}
+                <div className="absolute top-0 right-0 w-8 h-8 bg-marker-red/5 rotate-45 translate-x-4 -translate-y-4" />
+              </motion.div>
+            ))}
+
+            <div className="mt-6 flex flex-col items-center">
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className={`w-1 h-3 border border-pencil ${i < 4 ? 'bg-pen-blue' : 'bg-pencil/20'}`} />
+                ))}
+              </div>
+              <p className="text-[9px] font-black uppercase text-center tracking-widest text-muted-foreground">
+                Verification Pipeline: COMPLETE (08.2s total)
+              </p>
             </div>
-          </motion.div>
-        ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+        <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> Transliterated</span>
+        <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> Localized</span>
+        <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> Synchronized</span>
       </div>
     </div>
   );

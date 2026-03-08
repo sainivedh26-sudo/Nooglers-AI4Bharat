@@ -1,5 +1,7 @@
 import pipelineDiagram from "@/assets/pipeline-diagram.png";
 import { Heart } from "lucide-react";
+import ProjectUniqueness from "@/components/ProjectUniqueness";
+import CurrentStatus from "@/components/CurrentStatus";
 
 const HowWeBuilt = () => {
   return (
@@ -120,6 +122,12 @@ const HowWeBuilt = () => {
           </div>
         </div>
       </section>
+
+      {/* What Makes Us Different */}
+      <ProjectUniqueness />
+
+      {/* Where are we currently? */}
+      <CurrentStatus />
 
       {/* Footer - Bauhaus */}
       <footer className="bg-foreground border-t-4 border-[hsl(0,100%,65%)] py-8 px-4">
