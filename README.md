@@ -8,4 +8,4 @@
 ## Made with ❤️ by Team Nooglers
 <br>
 
-<img width="1034" height="583" alt="image" src="https://github.com/user-attachments/assets/50b759d4-d37d-44e3-8f44-d090d7530643" />
+<img width="1095" height="724" alt="image" src="https://github.com/user-attachments/assets/8221ad55-9924-4459-bc44-d01ce0db9de4" />
